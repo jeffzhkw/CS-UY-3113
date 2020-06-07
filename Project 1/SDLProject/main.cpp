@@ -99,20 +99,13 @@ void update(){
     
     angle = angle + 90.0f*deltaTime;
     
-    if (move) {
-        emo_x = emo_x + 2.0f*deltaTime;
-        
-    }
-    else {
-        emo_x = emo_x - 2.0f*deltaTime;
-       
-    }
+    if (move) { emo_x = emo_x + 2.0f*deltaTime;}
+    else {emo_x = emo_x - 2.0f*deltaTime;}
     
     if (emo_x > 5.0f || emo_x < -5.0f) {
         move = !move;
         direction = direction*-1.0f;
     }
-    
     
     if ((emo_x > 0.0f && move) ||(emo_x < 0.0f && !move)){
         scale = scale + 0.3f*deltaTime;
@@ -122,7 +115,7 @@ void update(){
         scale = scale - 0.3f*deltaTime;
     }
     
-    std::cout << emo_x << std::endl;
+    //std::cout << emo_x << std::endl;
 
     sandGlassMat = glm::translate(sandGlassMat, glm::vec3(-4.2f,3.0f,0.0f));
     sandGlassMat = glm::scale(sandGlassMat, glm::vec3(2.5f,2.5f,1.0f));
