@@ -85,8 +85,9 @@ void initialize(){
 float lastTick = 0.0f;
 
 float angle = 0;
-float emo_x = -4.0f;
+float emo_x = 0.0f;
 float direction = 1.0f;
+float scale = 1.0f;
 bool move = true;// ture move right, false move left;
 void update(){
     float ticks = (float)SDL_GetTicks() /1000.0f;
@@ -98,12 +99,27 @@ void update(){
     
     angle = angle + 90.0f*deltaTime;
     
-    if (move) emo_x = emo_x + 2.0f*deltaTime;
-    else emo_x = emo_x - 2.0f*deltaTime;
+    if (move) {
+        emo_x = emo_x + 2.0f*deltaTime;
+        
+    }
+    else {
+        emo_x = emo_x - 2.0f*deltaTime;
+       
+    }
     
     if (emo_x > 5.0f || emo_x < -5.0f) {
         move = !move;
         direction = direction*-1.0f;
+    }
+    
+    
+    if ((emo_x > 0.0f && move) ||(emo_x < 0.0f && !move)){
+        scale = scale + 0.3f*deltaTime;
+    }
+    
+    else if ((emo_x > 0.0f && !move) || (emo_x < 0.0f && move)){
+        scale = scale - 0.3f*deltaTime;
     }
     
     std::cout << emo_x << std::endl;
@@ -113,7 +129,7 @@ void update(){
     sandGlassMat = glm::rotate(sandGlassMat, glm::radians(angle), glm::vec3(0.0f,0.0f,1.0f));
     
     emoMat = glm::translate(emoMat, glm::vec3(emo_x, 0.0f, 0.0f));
-    emoMat = glm::scale(emoMat, glm::vec3(direction,1.0f,1.0f));
+    emoMat = glm::scale(emoMat, glm::vec3(direction*scale,scale,1.0f));
     
     
 }
