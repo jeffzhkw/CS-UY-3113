@@ -69,10 +69,10 @@ void initialize(){
     emoMat = glm::mat4(1.0f);
     
     
-    glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-    //glClearColor(0.945f, 0.863f, 0.612f, 1.0f);//set background color
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.945f, 0.863f, 0.612f, 1.0f);//set background color
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
     
     
     sandGlassTexID = LoadTexture("p1.png");
@@ -98,8 +98,11 @@ void update(){
     
     sandGlassMat = glm::mat4(1.0f);
     emoMat = glm::mat4(1.0f);
+    
+    sandGlassMat = glm::translate(sandGlassMat, glm::vec3(-4.2f,3.0f,0.0f));
+    sandGlassMat = glm::scale(sandGlassMat, glm::vec3(2.5f,2.5f,1.0f));
     sandGlassMat = glm::rotate(sandGlassMat, glm::radians(angle), glm::vec3(0.0f,0.0f,1.0f));
-    emoMat = glm::translate(emoMat, glm::vec3(emo_x, 3.0f, 0.0f));
+    emoMat = glm::translate(emoMat, glm::vec3(emo_x, 0.0f, 0.0f));
     
     
 }
