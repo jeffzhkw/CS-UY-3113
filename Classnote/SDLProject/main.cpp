@@ -42,6 +42,7 @@ GLuint LoadTexture(const char* filePath){//loading image to texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     return textureID;
+    
 }
 
 void Initialize() {
@@ -54,7 +55,7 @@ void Initialize() {
     glewInit();
 #endif
     
-    glViewport(0, 0, 1280, 960);
+    //glViewport(0, 0, 640, 480);
     
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");//under shaders folder
     
@@ -68,13 +69,13 @@ void Initialize() {
     //program.SetColor(1.0f, 0.0f, 0.0f, 1.0f);// set the color to red
     
     
-    glUseProgram(program.programID);
-    
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);//set background color: whenever clear the window, use this color
     glEnable(GL_BLEND);
-    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);//set background color: whenever clear the window, use this color
+    
+    
+    glUseProgram(program.programID);
     playerTextureID = LoadTexture("ctg.png");
     
 }
@@ -116,23 +117,23 @@ void Render() {
     
     glClear(GL_COLOR_BUFFER_BIT);
     
-    program.SetModelMatrix(modelMatrix);
-    
     float vertices[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
     float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
     
     glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-    glEnableVertexAttribArray(program.positionAttribute);
     glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    
+    glEnableVertexAttribArray(program.positionAttribute);
     glEnableVertexAttribArray(program.texCoordAttribute);
     
+    program.SetModelMatrix(modelMatrix);
     glBindTexture(GL_TEXTURE_2D, playerTextureID);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     
     glDisableVertexAttribArray(program.positionAttribute);
     glDisableVertexAttribArray(program.texCoordAttribute);
     
-    SDL_GL_SwapWindow(displayWindow);
+    SDL_GL_SwapWindow(displayWindow);// take what's in the memory to the screen;
     
     
     /*glClear(GL_COLOR_BUFFER_BIT);//do clear using the color set before
