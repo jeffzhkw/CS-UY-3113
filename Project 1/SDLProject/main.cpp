@@ -85,24 +85,35 @@ void initialize(){
 float lastTick = 0.0f;
 
 float angle = 0;
-float emo_x = 0.0f;
+float emo_x = -4.0f;
+float direction = 1.0f;
+bool move = true;// ture move right, false move left;
 void update(){
     float ticks = (float)SDL_GetTicks() /1000.0f;
     float deltaTime = ticks - lastTick;
     lastTick = ticks;
     
-    angle = angle + 90.0f*deltaTime;
-    emo_x = emo_x + 1.0f*deltaTime;
-    
-    //update object info here
-    
     sandGlassMat = glm::mat4(1.0f);
     emoMat = glm::mat4(1.0f);
     
+    angle = angle + 90.0f*deltaTime;
+    
+    if (move) emo_x = emo_x + 2.0f*deltaTime;
+    else emo_x = emo_x - 2.0f*deltaTime;
+    
+    if (emo_x > 5.0f || emo_x < -5.0f) {
+        move = !move;
+        direction = direction*-1.0f;
+    }
+    
+    std::cout << emo_x << std::endl;
+
     sandGlassMat = glm::translate(sandGlassMat, glm::vec3(-4.2f,3.0f,0.0f));
     sandGlassMat = glm::scale(sandGlassMat, glm::vec3(2.5f,2.5f,1.0f));
     sandGlassMat = glm::rotate(sandGlassMat, glm::radians(angle), glm::vec3(0.0f,0.0f,1.0f));
+    
     emoMat = glm::translate(emoMat, glm::vec3(emo_x, 0.0f, 0.0f));
+    emoMat = glm::scale(emoMat, glm::vec3(direction,1.0f,1.0f));
     
     
 }
@@ -119,7 +130,6 @@ void render(){
     glEnableVertexAttribArray(program.texCoordAttribute);
     
     //draw all my objects here
-    
     program.SetModelMatrix(emoMat);
     glBindTexture(GL_TEXTURE_2D, emoTexID);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -128,22 +138,15 @@ void render(){
     glBindTexture(GL_TEXTURE_2D, sandGlassTexID);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     
-    
-    
-    
+
     glDisableVertexAttribArray(program.positionAttribute);
     glDisableVertexAttribArray(program.texCoordAttribute);
-    
-    
-    
     
     SDL_GL_SwapWindow(displayWindow);
     
 }
 
 int main(int argc, char* argv[]) {
-    
-    
     initialize();
     
     while (gameIsRunning) {
@@ -156,7 +159,6 @@ int main(int argc, char* argv[]) {
         update();
         render();
     }
-    
     SDL_Quit();
     return 0;
 }
