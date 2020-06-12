@@ -21,8 +21,15 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
-float player_x = 0;
-float player_rotate = 0;
+//float player_x = 0;
+//float player_rotate = 0;
+
+glm::vec3 player_position = glm::vec3(0,0,0);
+glm::vec3 player_movement = glm::vec3(0,0,0);
+
+float player_speed = 1.0f;
+
+
 
 GLuint playerTextureID;
 
@@ -46,7 +53,7 @@ GLuint LoadTexture(const char* filePath){//loading image to texture
 }
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);// in future we initialize controller, audio
     displayWindow = SDL_CreateWindow("Textured triganle!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640 , 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -81,12 +88,70 @@ void Initialize() {
 }
 
 void ProcessInput() {
+    
+    player_movement = glm::vec3(0);
+    //nothing is pressed, we don't want to change anything
+    //until press event triggered
+    
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
-            gameIsRunning = false;
+    while(SDL_PollEvent(&event)){
+        switch(event.type){
+            case SDL_QUIT:
+            case SDL_WINDOWEVENT_CLOSE:
+                gameIsRunning = false;
+                break;
+                
+            case SDL_KEYDOWN:
+                switch(event.key.keysym.sym){
+                    case SDLK_LEFT:
+                        //player_movement.x = -1.0f; one click one move glichy
+                        break;
+
+                        
+                    case SDLK_RIGHT:
+                        //player_movement.x = 1.0f;
+                        break;
+                    case SDLK_SPACE:
+                        //player_movement.y = 1.0f;
+                        break;
+                }
+                break;
         }
+        
     }
+    
+    const Uint8 *keys = SDL_GetKeyboardState(NULL);
+    
+    if (keys[SDL_SCANCODE_LEFT]){
+        //move left, smooth
+        player_movement.x = -1.0f;
+    }
+    
+    else if (keys[SDL_SCANCODE_RIGHT]){
+        player_movement.x = 1.0f;
+        //move right
+    }
+    
+    if (keys[SDL_SCANCODE_UP]){
+        //move left, smooth
+        player_movement.y = 1.0f;
+    }
+    
+    else if (keys[SDL_SCANCODE_DOWN]){
+        player_movement.y = -1.0f;
+        //move right
+    }
+    
+    if (glm::length(player_movement) > 1.0f){//restrain speed
+        player_movement = glm::normalize(player_movement);
+    }
+
+    
+//    while (SDL_PollEvent(&event)) {
+//        if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
+//            gameIsRunning = false;
+//        }
+//    }
 }
 
 float lastTicks = 0.0f;
@@ -96,15 +161,18 @@ void Update() {
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
     
-    player_x += 1.0f * deltaTime;
-    player_rotate += 90.0f * deltaTime;
+    //player_x += 1.0f * deltaTime;
+    //player_rotate += 90.0f * deltaTime;
     
+    player_position += player_movement*player_speed*deltaTime;
     
-    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::mat4(1.0f);//reset position to origin
+    modelMatrix = glm::translate(modelMatrix, player_position);//draw new position
+    
     //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate),glm::vec3(0.0f,0.0f,1.0f));
     //the order matters here.
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x,0.0f,0.0f)); //z is 0.o
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate),glm::vec3(0.0f,0.0f,1.0f));
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x,0.0f,0.0f)); //z is 0.o
+    //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate),glm::vec3(0.0f,0.0f,1.0f));
     
     //modelMatrix = glm::rotate(modelMatrix, glm::radians(1.0f), glm::vec3(0.0f,0.0f,1.0f));
     
