@@ -109,27 +109,38 @@ void Update(){
         if(p2_pos.y > 0) p2_pos.y = 3.15f;
         else p2_pos.y = -3.15f;
     }
-    //losing animation
-    if (ball_pos.x < -4.5f){std::cout<<"p1 defeated" << std::endl;ball_speed = 1.0f;}
-    else if (ball_pos.x > 4.5f){std::cout<<"p2 defeated" << std::endl;ball_speed = 1.0f;}
-    
-    if (ball_pos.y > 3.65f || ball_pos.y < -3.65f){
+    if (ball_pos.y > 3.65f || ball_pos.y < -3.65f){//constrains for ball
         ball_move.y *= -1.0f;
         //prevent sticky bug
         if (ball_pos.y > 3.65f) ball_pos.y = 3.65f;
         else ball_pos.y = -3.65f;
     }
+    //x threhold: 0.25f; y threhold 0.7f;
+    //can refine collision
+    if (fabs(p1_pos.x - ball_pos.x) < 0.25f && fabs(p1_pos.y - ball_pos.y)<0.7f){//p1 horizontal&vertical collide check
+        if (ball_pos.x > -4.5f) {
+            ball_move.x *= -1.0f;
+            ball_pos.x = -4.25f;
+        }
+        else ball_speed = 1.0f;
+    }
+    if (fabs(p2_pos.x - ball_pos.x) < 0.25f && fabs(p2_pos.y - ball_pos.y)<0.7f){//p2 horizontal&vertical collide check
+        if (ball_pos.x < 4.5f) {
+            ball_move.x *= -1.0f;
+            ball_pos.x = 4.25f;
+        }
+        
+        else ball_speed = 1.0f;
+    }
+    
+    //losing animation
+    if (ball_pos.x < -4.65f){std::cout<<"p1 defeated" << std::endl;ball_speed = 1.0f;}
+    else if (ball_pos.x > 4.65f){std::cout<<"p2 defeated" << std::endl;ball_speed = 1.0f;}
+    
     if (ball_pos.x < -4.9f || ball_pos.x > 4.9f){
         ball_move = glm::vec3(0);// end round
     }
         
-    //x threhold: 0.25f; y threhold 0.7f;
-    if((fabs(p1_pos.x - ball_pos.x) < 0.25f && fabs(p1_pos.y - ball_pos.y)<0.7f)//p1 horizontal&vertical collide check
-       || (fabs(p2_pos.x - ball_pos.x) < 0.25f && fabs(p2_pos.y - ball_pos.y)<0.7f)){//p2 horizontal&vertical collide check
-       ball_move.x *= -1.0f;
-    }
-    
-    
     if (glm::length(ball_move) > 1.0f){//restrain speed
         ball_move = glm::normalize(ball_move);
     }
@@ -137,8 +148,6 @@ void Update(){
     p1_pos += p1_move*player_speed*deltaTime;
     p2_pos += p2_move*player_speed*deltaTime;
     ball_pos += ball_move*ball_speed*deltaTime;
-    
-    //change ball position using ball_move;
     
     p1 = glm::translate(p1, p1_pos);
     p2 = glm::translate(p2, p2_pos);
