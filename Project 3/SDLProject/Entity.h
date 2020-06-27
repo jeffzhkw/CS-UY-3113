@@ -16,8 +16,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+enum EntityType {PLAYER, REG, HARM, TARGET};
 class Entity{
 public:
+    float height = 1;
+    float width = 1;
+    EntityType entityType;
+    
     glm::vec3 position;
     glm::vec3 movement;
     glm::vec3 velocity;
@@ -32,10 +37,13 @@ public:
     bool collidedBottom = false;
     bool collidedLeft = false;
     bool collidedRight = false;
+    EntityType lastCollide;
     
-    bool harm = false;
+    int fontIndex = NULL;
+    
+    bool isHarm = false;
+    
     Entity();
-    
     bool CheckCollision(Entity *other);//do check harm here
     void CheckCollisionsY(Entity *objects, int objectCount);
     void CheckCollisionsX(Entity *objects, int objectCount);

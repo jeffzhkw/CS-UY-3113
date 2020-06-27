@@ -11,7 +11,7 @@
 		B48AF63E24A6FF19006ECCAF /* ship.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63724A6F2F3006ECCAF /* ship.png */; };
 		B48AF63F24A6FF19006ECCAF /* stone.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63D24A6FE5E006ECCAF /* stone.png */; };
 		B48AF64024A6FF19006ECCAF /* dirt.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63824A6F339006ECCAF /* dirt.png */; };
-		B48AF64124A6FF19006ECCAF /* landing.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63924A6F33F006ECCAF /* landing.png */; };
+		B48AF64124A6FF19006ECCAF /* grass.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63924A6F33F006ECCAF /* grass.png */; };
 		B48AF64224A6FF19006ECCAF /* spike.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF63624A6F25F006ECCAF /* spike.png */; };
 		B48AF64424A7029B006ECCAF /* font.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48AF64324A70293006ECCAF /* font.png */; };
 		DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B522323DE3F007CECB1 /* main.cpp */; };
@@ -36,7 +36,7 @@
 				B48AF63E24A6FF19006ECCAF /* ship.png in CopyFiles */,
 				B48AF63F24A6FF19006ECCAF /* stone.png in CopyFiles */,
 				B48AF64024A6FF19006ECCAF /* dirt.png in CopyFiles */,
-				B48AF64124A6FF19006ECCAF /* landing.png in CopyFiles */,
+				B48AF64124A6FF19006ECCAF /* grass.png in CopyFiles */,
 				B48AF64224A6FF19006ECCAF /* spike.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,7 +47,7 @@
 		B48AF63624A6F25F006ECCAF /* spike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spike.png; sourceTree = "<group>"; };
 		B48AF63724A6F2F3006ECCAF /* ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ship.png; sourceTree = "<group>"; };
 		B48AF63824A6F339006ECCAF /* dirt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt.png; sourceTree = "<group>"; };
-		B48AF63924A6F33F006ECCAF /* landing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = landing.png; sourceTree = "<group>"; };
+		B48AF63924A6F33F006ECCAF /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
 		B48AF63A24A6F37B006ECCAF /* Entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		B48AF63B24A6F37B006ECCAF /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		B48AF63D24A6FE5E006ECCAF /* stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stone.png; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 				B48AF63724A6F2F3006ECCAF /* ship.png */,
 				B48AF63D24A6FE5E006ECCAF /* stone.png */,
 				B48AF63824A6F339006ECCAF /* dirt.png */,
-				B48AF63924A6F33F006ECCAF /* landing.png */,
+				B48AF63924A6F33F006ECCAF /* grass.png */,
 				B48AF63624A6F25F006ECCAF /* spike.png */,
 				DBDF1B5B2323DE8D007CECB1 /* glm */,
 				DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */,
