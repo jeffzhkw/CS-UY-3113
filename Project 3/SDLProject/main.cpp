@@ -88,6 +88,8 @@ void Initialize(){
     state.player->speed = 1.0f;
     state.player->textureID = LoadTexture("ship.png");//To-do: width/height check
     state.player->entityType = PLAYER;
+    state.player->width = 0.8f;
+    state.player->height = 0.8f;
     
     //---------blocks-----------//
     state.blocks = new Entity[BLOCK_COUNT];
@@ -238,7 +240,7 @@ void Initialize(){
     state.loseWords[6].fontIndex = 86;
     state.loseWords[7].fontIndex = 69;
     state.loseWords[8].fontIndex = 82;
-    currMode = END;
+    currMode = MAIN_MENU;
 }
 
 void ProcessMain(){
@@ -408,12 +410,20 @@ void RenderLevel(){
 void RenderEnd(){
     if (state.player->lastCollide == HARM){
         //mission fail
+        for (int i =0; i < BLOCK_COUNT; i++){
+            state.blocks[i].Render(&program);
+        }
+        state.player->Render(&program);
         for (int i = 0; i < LOSE_LETTER_COUNT; i++){
            state.loseWords[i].Render(&program);
        }
     }
     else if (state.player->lastCollide == TARGET){
         //mission success!
+        for (int i =0; i < BLOCK_COUNT; i++){
+            state.blocks[i].Render(&program);
+        }
+        state.player->Render(&program);
         for (int i = 0; i < WIN_LETTER_COUNT; i++){
             state.winWords[i].Render(&program);
         }
