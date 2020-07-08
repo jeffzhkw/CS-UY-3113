@@ -27,7 +27,6 @@ public:
     float speed;
     
     GLuint textureID;
-    
     glm::mat4 modelMatrix;
     
     int *animRight = NULL;

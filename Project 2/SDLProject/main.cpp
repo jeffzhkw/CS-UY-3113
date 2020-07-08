@@ -5,6 +5,7 @@
 #endif
 
 #define GL_GLEXT_PROTOTYPES 1
+#include <SDL_mixer.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "glm/mat4x4.hpp"
@@ -23,9 +24,11 @@ glm::mat4 p1, p2, ball;
 glm::vec3 p1_pos, p2_pos, ball_pos;//regard it as a position.
 glm::vec3 p1_move, p2_move, ball_move;//as having a tendency or not
 
+Mix_Music *music;
+Mix_Chunk *bounce;
 
 void Initialize(){
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
         displayWindow = SDL_CreateWindow("Pong! Made by kw", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
         SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
         SDL_GL_MakeCurrent(displayWindow, context);
@@ -35,7 +38,14 @@ void Initialize(){
     #endif
     
     program.Load("shaders/vertex.glsl", "shaders/fragment.glsl");
-
+    
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("dooblydoo.mp3");
+    Mix_PlayMusic(music, -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME/4);
+    bounce = Mix_LoadWAV("bounce.wav");
+    
+    
     program.SetViewMatrix(glm::mat4(1.0f));
     program.SetProjectionMatrix(glm::ortho(-5.0f,5.0f,-3.75f,3.75f,-1.0f, 1.0f));
     
@@ -46,7 +56,8 @@ void Initialize(){
     p2_pos.x = 4.5f;
     
     
-   glClearColor(0.945f, 0.863f, 0.612f, 1.0f);
+    
+    glClearColor(0.945f, 0.863f, 0.612f, 1.0f);
         
     
 }
@@ -123,6 +134,7 @@ void Update(){
             ball_pos.x = -4.25f;
         }
         else ball_speed = 1.0f;
+        Mix_PlayChannel(-1,bounce, 0);
     }
     if (fabs(p2_pos.x - ball_pos.x) < 0.25f && fabs(p2_pos.y - ball_pos.y)<0.7f){//p2 horizontal&vertical collide check
         if (ball_pos.x < 4.5f) {
@@ -131,6 +143,7 @@ void Update(){
         }
         
         else ball_speed = 1.0f;
+        Mix_PlayChannel(-1,bounce, 0);
     }
     
     //losing animation
