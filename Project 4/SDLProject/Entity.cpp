@@ -1,3 +1,11 @@
+//
+//  Entity.cpp
+//  Project4
+//
+//  Created by Kewei Zhang on 7/11/20.
+//  Copyright © 2020 ctg. All rights reserved.
+//
+
 #include "Entity.h"
 
 Entity::Entity()
@@ -10,12 +18,15 @@ Entity::Entity()
     
     modelMatrix = glm::mat4(1.0f);
 }
+
+//check Collisions
 bool Entity::CheckCollision(Entity *other){
     if (isActive == false || other->isActive == false) return false;
     float xdist = fabs(position.x - other->position.x) - ((width + other->width)/2.0f);
     float ydist = fabs(position.y - other->position.y) - ((height + other->height)/2.0f);
     
     if (xdist < 0  && ydist < 0){
+        lastCollide = other->entityType;
         return true;
     }
     return false;
@@ -61,50 +72,143 @@ void Entity::CheckCollisionsX(Entity *objects, int objectCount){
             }
         }
     }
+}
+//bool Entity::pointInBox(glm::vec3 point, Entity *other){
+//
+//    glm::vec3 topLeft = glm::vec3(other->position.x-other->width/2, other->position.y + other->height/2, 0);
+//    glm::vec3 bottomRight = glm::vec3(other->position.x + other->width/2, other->position.y - other->height/2, 0);
+//
+//    if (topLeft.x < point.x &&point.x < bottomRight.x){
+//        if (bottomRight.y < point.y && point.y < topLeft.y){
+//            return true;
+//        }
+//    }
+//    return false;
+//}
+//
+//void Entity::CheckForPit(Entity *objects, int objectCount){
+//    //two sensor point
+//    glm::vec3 rightSensor = glm::vec3(position.x + 0.6f, position.y -0.6f, 0);
+//    glm::vec3 leftSensor = glm::vec3(position.x -0.6f, position.y -0.6f,0);
+//
+//    for (int i = 0; i < objectCount; i++){
+//        Entity *object = &objects[i]; //the block
+//
+//        //if sensor point not in block
+//        if(pointInBox(rightSensor, object) == false){
+//            collidedRight = true;
+//        }
+//        else if (pointInBox(leftSensor, object) == false){
+//            collidedLeft = true;
+//        }
+//    }
+//}
+
+//AI Methods
+void Entity::AIWalk(Entity *player){
     
-}
-
-
-void Entity::AIWalker(){
-    movement = glm::vec3(-1,0,0);
-}
-
-void Entity::AIWaitAndGO(Entity *player){
-    switch (aiState){
+    switch(aiState){
         case IDLE:
-            if (glm::distance(position, player->position) < 3.0f){
-                aiState = WALKING;
-            }
-            break;
-        case WALKING:
-            if (player->position.x < position.x){
+            if (glm::distance(position, player->position) < 8.0f){
+                aiState = SENSING;
                 movement = glm::vec3(-1,0,0);
             }
-            else{
+            break;
+        case SENSING:
+            if (collidedRight || collidedLeft){
+                movement.x = movement.x * -1;
+            }
+            break;
+        case ENGAGE:
+            break;
+        case DEAD:
+            break;
+    }
+}
+
+void Entity::AITrack(Entity *player){
+    switch(aiState){
+        case IDLE:
+            if (glm::distance(position, player->position) < 3.0f){
+                movement = glm::vec3(-1,0,0);
+                aiState = SENSING;
+            }
+            break;
+        case SENSING:
+            speed = 1.5f;
+            if (player->position.x > position.x){
                 movement = glm::vec3(1,0,0);
+            }
+            else if (player->position.x < position.x){
+                movement = glm::vec3(-1,0,0);
+            }
+            break;
+        case ENGAGE:
+            //jumping around
+            break;
+        case DEAD:
+            break;
+    }
+}
+
+void Entity::AIDash(Entity *player){
+    switch(aiState){
+        case IDLE:
+            if (glm::distance(position, player->position) < 20.0f){
+                aiState = SENSING;
+                 movement = glm::vec3(1,0,0);
+            }
+            break;
+        case SENSING:
+            if (glm::distance(position.y, player->position.y) <0.1f){//same horizontal
+                aiState = ENGAGE;
+            }
+            std::cout << "right: " << collidedRight << std::endl;
+            if (collidedRight || collidedLeft){
+                movement.x = movement.x * -1;
+            }
+            break;
+        case ENGAGE:
+            speed = 5.0f;
+            if (collidedRight || collidedLeft){
+                movement.x = movement.x * -1;
+            }
+            if (glm::distance(position.y, player->position.y) <1.5f){//same horizontal
+                aiState = SENSING;
             }
             
             break;
-        case ATTACKING:
-            
+        case DEAD:
             break;
     }
 }
 
 void Entity::AI(Entity *player){
     switch(aiType){
-        case WALKER:
-            AIWalker();
+        case WALK:
+            std::cout << "WALK" << std::endl;
+            AIWalk(player);
             break;
-        case WAITANDGO:
-            AIWaitAndGO(player);
+        case TRACK:
+            std::cout << "TRACK" << std::endl;
+            AITrack(player);
             break;
+        case DASH:
+            std::cout << "DASH" << std::endl;
+            AIDash(player);
+            break;
+    }
+    if (CheckCollision(player)){
+        if (player->position.y > position.y){
+            isActive = false;
+        }
+        else{
+            player->isActive = false;
+        }
     }
 }
 
-
-    
-
+//Update and Render, can be called by PLAYER, ENEMY, BLOCK
 void Entity::Update(float deltaTime, Entity *player, Entity *platforms, int platformCount){
     if (isActive == false) return;
     
@@ -112,30 +216,10 @@ void Entity::Update(float deltaTime, Entity *player, Entity *platforms, int plat
     collidedBottom = false;
     collidedLeft = false;
     collidedRight = false;
-    if (entityType == ENEMY){
-        AI(player);
-    }
-    if (animIndices != NULL) {
-        if (glm::length(movement) != 0) {
-            animTime += deltaTime;
-
-            if (animTime >= 0.25f)
-            {
-                animTime = 0.0f;
-                animIndex++;
-                if (animIndex >= animFrames)
-                {
-                    animIndex = 0;
-                }
-            }
-        } else {
-            animIndex = 0;
-        }
-    }
-    if (jump){
-        jump = false;
-        velocity.y += jumpPower;
-    }
+    
+    
+    
+    //This part is for checking PLAYER/ENEMY against BLOCKS
     velocity.x = movement.x * speed;
     velocity += acceleration * deltaTime;
     
@@ -147,15 +231,30 @@ void Entity::Update(float deltaTime, Entity *player, Entity *platforms, int plat
     
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
+    
+    if (entityType == ENEMY){
+        //CheckForPit(platforms, platformCount);
+        AI(player);
+        //ENEMY check whether it hits player.
+        //1. this.lastCollide = PLAYER
+        //2. top-> DEAD, left right->GAME END
+        //3. 3 ENEMIES DEAD->WIN
+    }
+    if (entityType == PLAYER){
+        if (jump){
+            jump = false;
+            velocity.y += jumpPower;
+        }
+    }
+    
 }
-
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index)
 {
-    float u = (float)(index % animCols) / (float)animCols;
-    float v = (float)(index / animCols) / (float)animRows;
+    float u = (float)(index % 16) / (float)16;
+    float v = (float)(index / 16) / (float)16;
     
-    float width = 1.0f / (float)animCols;
-    float height = 1.0f / (float)animRows;
+    float width = 1.0f / (float)16;
+    float height = 1.0f / (float)16;
     
     float texCoords[] = { u, v + height, u + width, v + height, u + width, v,
         u, v + height, u + width, v, u, v};
@@ -181,10 +280,11 @@ void Entity::Render(ShaderProgram *program) {
     
     program->SetModelMatrix(modelMatrix);
     
-    if (animIndices != NULL) {
-        DrawSpriteFromTextureAtlas(program, textureID, animIndices[animIndex]);
+    if (fontIndex != NULL) {//is a letter
+        DrawSpriteFromTextureAtlas(program, textureID, fontIndex);//need init. in main
         return;
     }
+    
     
     float vertices[]  = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
     float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
@@ -202,8 +302,3 @@ void Entity::Render(ShaderProgram *program) {
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
-
-
-
-
-

@@ -1,3 +1,11 @@
+//
+//  Entity.hpp
+//  Project4
+//
+//  Created by Kewei Zhang on 7/11/20.
+//  Copyright © 2020 ctg. All rights reserved.
+//
+
 #define GL_SILENCE_DEPRECATION
 
 #ifdef _WINDOWS
@@ -11,28 +19,29 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EntityType{PLAYER, PLATFORM, ENEMY};
+enum EntityType{PLAYER, BLOCK,ENEMY};
 
 
-enum AIType {WALKER, WAITANDGO, };
-enum AIState {IDLE, WALKING, ATTACKING};
+enum AIType {TRACK, WALK, DASH };
+enum AIState {IDLE, SENSING, ENGAGE, DEAD};
+
 class Entity {
 public:
     EntityType entityType;
     AIType aiType;
     AIState aiState;
+    
     glm::vec3 position;
     glm::vec3 movement;
     glm::vec3 acceleration;
     glm::vec3 velocity;
+    float speed;
     
     float width = 1;
     float height = 1;
     
     bool jump = false;
     float jumpPower = 0;
-    
-    float speed;
     
     GLuint textureID;
     glm::mat4 modelMatrix;
@@ -54,17 +63,28 @@ public:
     bool collidedBottom = false;
     bool collidedLeft = false;
     bool collidedRight = false;
+    EntityType lastCollide;
+    
+    int fontIndex = NULL;
     
     Entity();
     
     bool CheckCollision(Entity *other);
     void CheckCollisionsY(Entity *objects, int objectCount);
     void CheckCollisionsX(Entity *objects, int objectCount);
+    
+    bool pointInBox(glm::vec3 point, Entity *other);
+    void CheckForPit(Entity *objects, int objectCount);
+    
     void Update(float deltaTime, Entity *player, Entity *platform, int platformCount);
-    void Render(ShaderProgram *program);
     void DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index);
+    void Render(ShaderProgram *program);
+
     
     void AI(Entity *player);
-    void AIWalker();
-    void AIWaitAndGO(Entity *player);
+    void AITrack(Entity *player);
+    void AIWalk(Entity *player);
+    void AIDash(Entity *player);
 };
+
+

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B49A8CB724BA0C89008A941B /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B49A8CB524BA0C89008A941B /* Entity.cpp */; };
+		B49A8CB824BA11AF008A941B /* block.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CB024BA0B6B008A941B /* block.png */; };
+		B49A8CB924BA11AF008A941B /* enemy_left.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CB224BA0B6B008A941B /* enemy_left.png */; };
+		B49A8CBA24BA11AF008A941B /* enemy_right.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CAF24BA0B6B008A941B /* enemy_right.png */; };
+		B49A8CBB24BA11AF008A941B /* player_left.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CB324BA0B6B008A941B /* player_left.png */; };
+		B49A8CBC24BA11AF008A941B /* player_right.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CB124BA0B6B008A941B /* player_right.png */; };
+		B49A8CBE24BA9D73008A941B /* font.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B49A8CBD24BA9D6F008A941B /* font.png */; };
 		DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B522323DE3F007CECB1 /* main.cpp */; };
 		DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */; };
 		DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBDF1B5C2323DE8D007CECB1 /* shaders */; };
@@ -24,13 +31,27 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
+				B49A8CBE24BA9D73008A941B /* font.png in CopyFiles */,
 				DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */,
+				B49A8CB824BA11AF008A941B /* block.png in CopyFiles */,
+				B49A8CB924BA11AF008A941B /* enemy_left.png in CopyFiles */,
+				B49A8CBA24BA11AF008A941B /* enemy_right.png in CopyFiles */,
+				B49A8CBB24BA11AF008A941B /* player_left.png in CopyFiles */,
+				B49A8CBC24BA11AF008A941B /* player_right.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B49A8CAF24BA0B6B008A941B /* enemy_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enemy_right.png; sourceTree = "<group>"; };
+		B49A8CB024BA0B6B008A941B /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
+		B49A8CB124BA0B6B008A941B /* player_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_right.png; sourceTree = "<group>"; };
+		B49A8CB224BA0B6B008A941B /* enemy_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enemy_left.png; sourceTree = "<group>"; };
+		B49A8CB324BA0B6B008A941B /* player_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_left.png; sourceTree = "<group>"; };
+		B49A8CB524BA0C89008A941B /* Entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
+		B49A8CB624BA0C89008A941B /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
+		B49A8CBD24BA9D6F008A941B /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font.png; sourceTree = "<group>"; };
 		DBDF1B4F2323DE3F007CECB1 /* Project4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project4; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDF1B522323DE3F007CECB1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
@@ -81,12 +102,20 @@
 		DBDF1B512323DE3F007CECB1 /* SDLProject */ = {
 			isa = PBXGroup;
 			children = (
+				B49A8CBD24BA9D6F008A941B /* font.png */,
+				B49A8CB024BA0B6B008A941B /* block.png */,
+				B49A8CB224BA0B6B008A941B /* enemy_left.png */,
+				B49A8CAF24BA0B6B008A941B /* enemy_right.png */,
+				B49A8CB324BA0B6B008A941B /* player_left.png */,
+				B49A8CB124BA0B6B008A941B /* player_right.png */,
 				DBDF1B5B2323DE8D007CECB1 /* glm */,
 				DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */,
 				DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */,
 				DBDF1B5C2323DE8D007CECB1 /* shaders */,
 				DBDF1B5A2323DE8D007CECB1 /* stb_image.h */,
 				DBDF1B522323DE3F007CECB1 /* main.cpp */,
+				B49A8CB524BA0C89008A941B /* Entity.cpp */,
+				B49A8CB624BA0C89008A941B /* Entity.h */,
 			);
 			path = SDLProject;
 			sourceTree = "<group>";
@@ -160,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */,
+				B49A8CB724BA0C89008A941B /* Entity.cpp in Sources */,
 				DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
