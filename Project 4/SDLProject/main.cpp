@@ -18,7 +18,7 @@
 
 #define BLOCK_COUNT 77
 #define ENEMY_COUNT 3
-#define WIN_LETTER_COUNT 15
+#define WIN_LETTER_COUNT 7
 #define LOSE_LETTER_COUNT 9
 struct GameState {
     Entity *player;
@@ -185,21 +185,13 @@ void Initialize(){
         state.winWords[i].textureID = fontID;
         state.winWords[i].position = glm::vec3((float)(-4.5f+(i/2.0f)),1.0f,0.0f);
     }
-    state.winWords[0].fontIndex = 77;
-    state.winWords[1].fontIndex = 73;
-    state.winWords[2].fontIndex = 83;
-    state.winWords[3].fontIndex = 83;
-    state.winWords[4].fontIndex = 73;
-    state.winWords[5].fontIndex = 79;
+    state.winWords[0].fontIndex = 89;
+    state.winWords[1].fontIndex = 79;
+    state.winWords[2].fontIndex = 85;
+    state.winWords[3].fontIndex = 32;
+    state.winWords[4].fontIndex = 87;
+    state.winWords[5].fontIndex = 73;
     state.winWords[6].fontIndex = 78;
-    state.winWords[7].fontIndex = 32;
-    state.winWords[8].fontIndex = 83;
-    state.winWords[9].fontIndex = 85;
-    state.winWords[10].fontIndex = 67;
-    state.winWords[11].fontIndex = 67;
-    state.winWords[12].fontIndex = 69;
-    state.winWords[13].fontIndex = 83;
-    state.winWords[14].fontIndex = 83;
     for (int i = 0; i < WIN_LETTER_COUNT; i++){
                state.winWords[i].Update(0, NULL, NULL, 0);
     }

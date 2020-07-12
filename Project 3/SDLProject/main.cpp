@@ -360,7 +360,6 @@ void UpdateEnd(float deltaTime){
         for (int i = 0; i < WIN_LETTER_COUNT; i++){
             state.winWords[i].Update(0, NULL, 0);
         }
-        
     }
 }
 
