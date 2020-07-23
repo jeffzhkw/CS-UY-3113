@@ -157,9 +157,10 @@ void Update() {
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
-    program.SetViewMatrix(viewMatrix);
     
+    program.SetViewMatrix(viewMatrix);
     currentScene->Render(&program);
+    
     
     SDL_GL_SwapWindow(displayWindow);
 }

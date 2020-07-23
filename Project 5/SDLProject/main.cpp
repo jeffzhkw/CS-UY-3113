@@ -17,6 +17,23 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+#include "Util.h"
+#include "Entity.h"
+#include "Map.h"
+#include "Scene.h"
+#include "Level1.h"
+#include "Level2.h"
+#include "Level3.h"
+#include "Menu.h"
+
+
+Scene *currentScene;
+Scene *sceneList[4];
+void SwitchToScene(Scene *scene){
+    currentScene = scene;
+    currentScene->Initialize();
+}
+
 
 void Initialize(){
     SDL_Init(SDL_INIT_VIDEO);
@@ -31,8 +48,8 @@ void Initialize(){
     
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
+//    projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
     projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
-    
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
     
@@ -41,10 +58,22 @@ void Initialize(){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    //initialize scenes
+    sceneList[0] = new Menu();
+    sceneList[1] = new Level1();
+    sceneList[2] = new Level2();
+    sceneList[3] = new Level3();
+    SwitchToScene(sceneList[0]);
+    GLuint fontTextureID = Util::LoadTexture("font.png");
+    
+    
 }
 
 void ProcessInput(){
+    
     //reset movement intention to zero
+    currentScene->state.player->movement = glm::vec3(0);
     
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -66,6 +95,9 @@ void ProcessInput(){
                         
                     case SDLK_SPACE:
                         // Some sort of action
+                        if (currentScene->state.player->collidedBottom){
+                            currentScene->state.player->jump = true;
+                        }
                         break;
                 }
                 break; // SDL_KEYDOWN
@@ -75,14 +107,18 @@ void ProcessInput(){
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
     if (keys[SDL_SCANCODE_LEFT]) {
-    
+        currentScene->state.player->movement.x = -1.0f;
+        currentScene->state.player->animIndices = currentScene->state.player->animLeft;
     }
     else if (keys[SDL_SCANCODE_RIGHT]) {
-
+        currentScene->state.player->movement.x = 1.0f;
+               currentScene->state.player->animIndices = currentScene->state.player->animRight;
     }
-    
-
     //normalize
+    if (glm::length(currentScene->state.player->movement) > 1.0f) {
+        currentScene->state.player->movement = glm::normalize(currentScene->state.player->movement);
+    }
+
 }
 
 #define FIXED_TIMESTEP 0.0166666f
@@ -92,31 +128,115 @@ void Update(){
     float ticks = (float)SDL_GetTicks() / 1000.0f;
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
-    
     deltaTime += accumulator;
+    
     if (deltaTime < FIXED_TIMESTEP) {
         accumulator = deltaTime;
         return;
-        
     }
+    
     while (deltaTime >= FIXED_TIMESTEP) {
         // Update curr scene. Notice it's FIXED_TIMESTEP. Not deltaTime
-        
+        currentScene->Update(FIXED_TIMESTEP);
+        deltaTime -= FIXED_TIMESTEP;
     }
     accumulator = deltaTime;
-    
-    //update viewMatrix to follow the player
-    
+    viewMatrix= glm::mat4(1.0f);
+    if (currentScene == sceneList[1]){
+        if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 9.25,0));
+        }
+        else if(currentScene->state.player->position.x < 5){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.x > 16){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75,0));
+        }
+        else if (currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 9.25,0));
+        }
+        else{
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
+        }
+    }
+    else if (currentScene == sceneList[2]){
+        if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 9.25,0));
+        }
+        else if(currentScene->state.player->position.x < 5){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.x > 16){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75,0));
+        }
+        else if (currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 9.25,0));
+        }
+        else{
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
+        }
+    }
+    else if (currentScene == sceneList[3]){
+        if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 3.75,0));
+        }
+        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 9.25,0));
+        }
+        else if(currentScene->state.player->position.x < 5){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.x > 21){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, -currentScene->state.player->position.y,0));
+        }
+        else if (currentScene->state.player->position.y > -3.75){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75,0));
+        }
+        else if (currentScene->state.player->position.y < -9.25){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 9.25,0));
+        }
+        else{
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
+        }
+    }
+
 }
 
 void Render(){
     glClear(GL_COLOR_BUFFER_BIT);
+    
     program.SetViewMatrix(viewMatrix);
     
-    //render curr scene
+    currentScene->Render(&program);
+    if(currentScene == sceneList[0]){
+        Util::DrawText(&program, fontTextureID, "An Untitled Platformer", 0.5, -0.25, glm::vec3(-3,0,0));
+        Util::DrawText(&program, fontTextureID, "press ENTER", 0.5, -0.25, glm::vec3(-2.5,-1,0));
+    }
+    
+    
     
     SDL_GL_SwapWindow(displayWindow);
-    
 }
 
 
@@ -127,8 +247,10 @@ int main(int argc, char* argv[]) {
     while (gameIsRunning) {
         ProcessInput();
         Update();
-        
         //scene switch
+        if (currentScene->state.nextScene >= 0){
+            SwitchToScene(sceneList[currentScene->state.nextScene]);
+        }
         Render();
     }
     

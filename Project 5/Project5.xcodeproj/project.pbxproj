@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B4450A3624C7E177003417A4 /* Level1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4450A3424C7E177003417A4 /* Level1.cpp */; };
+		B4450A3924C7E182003417A4 /* Level2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4450A3724C7E182003417A4 /* Level2.cpp */; };
+		B4450A3C24C7E18C003417A4 /* Level3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4450A3A24C7E18C003417A4 /* Level3.cpp */; };
+		B4450A3F24C7E41A003417A4 /* Menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4450A3D24C7E41A003417A4 /* Menu.cpp */; };
+		B4450A4124C8B6D3003417A4 /* tileset.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B4450A4024C8B612003417A4 /* tileset.png */; };
+		B4450A4324C8B73A003417A4 /* george_0.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B4450A4224C8B735003417A4 /* george_0.png */; };
+		B4450A4524C91F8B003417A4 /* font.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B4450A4424C91DF4003417A4 /* font.png */; };
 		B463458524C77F7000C0CCC4 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B463458324C77F7000C0CCC4 /* Entity.cpp */; };
 		B463458824C77F7C00C0CCC4 /* Map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B463458624C77F7C00C0CCC4 /* Map.cpp */; };
 		B463458B24C77F9800C0CCC4 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B463458924C77F9800C0CCC4 /* Scene.cpp */; };
@@ -29,12 +36,26 @@
 			dstSubfolderSpec = 6;
 			files = (
 				DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */,
+				B4450A4124C8B6D3003417A4 /* tileset.png in CopyFiles */,
+				B4450A4324C8B73A003417A4 /* george_0.png in CopyFiles */,
+				B4450A4524C91F8B003417A4 /* font.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B4450A3424C7E177003417A4 /* Level1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Level1.cpp; sourceTree = "<group>"; };
+		B4450A3524C7E177003417A4 /* Level1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Level1.h; sourceTree = "<group>"; };
+		B4450A3724C7E182003417A4 /* Level2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Level2.cpp; sourceTree = "<group>"; };
+		B4450A3824C7E182003417A4 /* Level2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Level2.h; sourceTree = "<group>"; };
+		B4450A3A24C7E18C003417A4 /* Level3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Level3.cpp; sourceTree = "<group>"; };
+		B4450A3B24C7E18C003417A4 /* Level3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Level3.h; sourceTree = "<group>"; };
+		B4450A3D24C7E41A003417A4 /* Menu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Menu.cpp; sourceTree = "<group>"; };
+		B4450A3E24C7E41A003417A4 /* Menu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Menu.h; sourceTree = "<group>"; };
+		B4450A4024C8B612003417A4 /* tileset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tileset.png; sourceTree = "<group>"; };
+		B4450A4224C8B735003417A4 /* george_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = george_0.png; sourceTree = "<group>"; };
+		B4450A4424C91DF4003417A4 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font.png; sourceTree = "<group>"; };
 		B463458324C77F7000C0CCC4 /* Entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		B463458424C77F7000C0CCC4 /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		B463458624C77F7C00C0CCC4 /* Map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Map.cpp; sourceTree = "<group>"; };
@@ -93,6 +114,9 @@
 		DBDF1B512323DE3F007CECB1 /* SDLProject */ = {
 			isa = PBXGroup;
 			children = (
+				B4450A4424C91DF4003417A4 /* font.png */,
+				B4450A4024C8B612003417A4 /* tileset.png */,
+				B4450A4224C8B735003417A4 /* george_0.png */,
 				DBDF1B5B2323DE8D007CECB1 /* glm */,
 				DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */,
 				DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */,
@@ -107,6 +131,14 @@
 				B463458A24C77F9800C0CCC4 /* Scene.h */,
 				B463458C24C77FA700C0CCC4 /* Util.cpp */,
 				B463458D24C77FA700C0CCC4 /* Util.h */,
+				B4450A3424C7E177003417A4 /* Level1.cpp */,
+				B4450A3524C7E177003417A4 /* Level1.h */,
+				B4450A3724C7E182003417A4 /* Level2.cpp */,
+				B4450A3824C7E182003417A4 /* Level2.h */,
+				B4450A3A24C7E18C003417A4 /* Level3.cpp */,
+				B4450A3B24C7E18C003417A4 /* Level3.h */,
+				B4450A3D24C7E41A003417A4 /* Menu.cpp */,
+				B4450A3E24C7E41A003417A4 /* Menu.h */,
 			);
 			path = SDLProject;
 			sourceTree = "<group>";
@@ -182,9 +214,13 @@
 				DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */,
 				B463458524C77F7000C0CCC4 /* Entity.cpp in Sources */,
 				B463458824C77F7C00C0CCC4 /* Map.cpp in Sources */,
+				B4450A3C24C7E18C003417A4 /* Level3.cpp in Sources */,
+				B4450A3F24C7E41A003417A4 /* Menu.cpp in Sources */,
 				B463458E24C77FA700C0CCC4 /* Util.cpp in Sources */,
 				B463458B24C77F9800C0CCC4 /* Scene.cpp in Sources */,
+				B4450A3924C7E182003417A4 /* Level2.cpp in Sources */,
 				DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */,
+				B4450A3624C7E177003417A4 /* Level1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
