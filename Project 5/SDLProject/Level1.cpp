@@ -26,7 +26,7 @@ unsigned int level1_data[] = {
     3, 2, 2, 2, 2, 2, 3, 3, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 3
 };//hardcode corresponding value;
-glm::mat4 viewMatrix1;
+
 void Level1::Initialize(){
     //init player/enemy/map
     state.nextScene = -1;
@@ -59,16 +59,10 @@ void Level1::Initialize(){
 
 void Level1::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
-    
-    //update viewMatrix to follow the player
-    
-    
 
-    
-    std::cout << state.player->position.x << std::endl;
-    std::cout << state.player->position.y << std::endl;
-    
     //switch scene condition
+    
+    
     
     if (state.player->position.x >=19.5 && state.player->position.y < -12){
         state.nextScene = 2;//LEVEL2
@@ -77,7 +71,6 @@ void Level1::Update(float deltaTime){
 }
 
 void Level1::Render(ShaderProgram *program){
-    //program->SetViewMatrix(viewMatrix1);
     state.map->Render(program);
     state.player->Render(program);
 }

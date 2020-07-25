@@ -15,8 +15,9 @@
 enum EntityType{PLAYER, PLATFORM, ENEMY};
 
 
-enum AIType {WALKER, WAITANDGO, };
-enum AIState {IDLE, WALKING, ATTACKING};
+enum AIType {DASH};
+enum AIState {IDLE, SENSING, ENGAGE, DEAD};
+
 class Entity {
 public:
     EntityType entityType;
@@ -55,6 +56,8 @@ public:
     bool collidedBottom = false;
     bool collidedLeft = false;
     bool collidedRight = false;
+    //EntityType lastCollide;
+    
     
     Entity();
     
@@ -66,8 +69,7 @@ public:
     void DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index);
     
     void AI(Entity *player);
-    void AIWalker();
-    void AIWaitAndGO(Entity *player);
+    void AIDash(Entity *player);
     
     void CheckCollisionX(Map *map);
     void CheckCollisionY(Map *map);

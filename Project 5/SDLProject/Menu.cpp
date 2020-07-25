@@ -9,11 +9,13 @@
 #include "Menu.h"
 #define TITLE_COUNT
 #define DESCRIPTION_COUNT
+GLuint fontTextureID;
 
 void Menu::Initialize(){
     //initialize fonts
     state.player = new Entity();
     state.nextScene = -1;
+    fontTextureID = Util::LoadTexture("font.png");
    
 }
 
@@ -28,5 +30,6 @@ void Menu::Update(float deltaTime){
 }
 
 void Menu::Render(ShaderProgram *program){
-    
+    Util::DrawText(program, fontTextureID, "An Untitled Platformer", 0.5, -0.25, glm::vec3(-3,0,0));
+    Util::DrawText(program, fontTextureID, "press ENTER to play!", 0.5, -0.25, glm::vec3(-2.5,-1,0));
 }

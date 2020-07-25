@@ -7,9 +7,10 @@ Entity::Entity()
     acceleration = glm::vec3(0);
     velocity = glm::vec3(0);
     speed = 0;
-    
     modelMatrix = glm::mat4(1.0f);
+    
 }
+//Entity vs Entity
 bool Entity::CheckCollision(Entity *other){
     if (isActive == false || other->isActive == false) return false;
     float xdist = fabs(position.x - other->position.x) - ((width + other->width)/2.0f);
@@ -63,7 +64,7 @@ void Entity::CheckCollisionsX(Entity *objects, int objectCount){
     }
     
 }
-
+//Entity vs Map
 void Entity::CheckCollisionY(Map *map){
     // Probes for tiles
     glm::vec3 top = glm::vec3(position.x, position.y + (height / 2), position.z);
@@ -132,39 +133,23 @@ void Entity::CheckCollisionX(Map *map){
 
 
 
-void Entity::AIWalker(){
-    movement = glm::vec3(-1,0,0);
-}
-
-void Entity::AIWaitAndGO(Entity *player){
-    switch (aiState){
+void Entity::AIDash(Entity *player){
+    switch(aiState){
         case IDLE:
-            if (glm::distance(position, player->position) < 3.0f){
-                aiState = WALKING;
-            }
             break;
-        case WALKING:
-            if (player->position.x < position.x){
-                movement = glm::vec3(-1,0,0);
-            }
-            else{
-                movement = glm::vec3(1,0,0);
-            }
-            
+        case SENSING:
             break;
-        case ATTACKING:
-            
+        case ENGAGE:
+            break;
+        case DEAD:
             break;
     }
 }
 
 void Entity::AI(Entity *player){
     switch(aiType){
-        case WALKER:
-            AIWalker();
-            break;
-        case WAITANDGO:
-            AIWaitAndGO(player);
+        case DASH:
+            AIDash(player);
             break;
     }
 }
@@ -184,17 +169,15 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     if (animIndices != NULL) {
         if (glm::length(movement) != 0) {
             animTime += deltaTime;
-
-            if (animTime >= 0.25f)
-            {
+            if (animTime >= 0.25f){
                 animTime = 0.0f;
                 animIndex++;
-                if (animIndex >= animFrames)
-                {
+                if (animIndex >= animFrames){
                     animIndex = 0;
                 }
             }
-        } else {
+        }
+        else {
             animIndex = 0;
         }
     }
@@ -202,6 +185,7 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
         jump = false;
         velocity.y += jumpPower;
     }
+    
     velocity.x = movement.x * speed;
     velocity += acceleration * deltaTime;
     
@@ -216,7 +200,7 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }
-
+//for player animation
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index)
 {
     float u = (float)(index % animCols) / (float)animCols;

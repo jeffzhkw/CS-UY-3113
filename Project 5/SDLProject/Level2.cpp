@@ -21,7 +21,7 @@ unsigned int level2_data[] = {
     3, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3
 };//hardcode corresponding value;
-glm::mat4 viewMatrix2;
+
 void Level2::Initialize(){
     //init player/enemy/map
     state.nextScene = -1;
@@ -56,8 +56,6 @@ void Level2::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
     
     
-    std::cout << state.player->position.x << std::endl;
-    std::cout << state.player->position.y << std::endl;
     
     if (state.player->position.x >=19.5 && state.player->position.y < -7){
         state.nextScene = 3;//LEVEL2

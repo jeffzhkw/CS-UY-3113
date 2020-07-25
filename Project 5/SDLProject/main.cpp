@@ -7,6 +7,7 @@
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <SDL_mixer.h>
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
@@ -33,10 +34,12 @@ void SwitchToScene(Scene *scene){
     currentScene = scene;
     currentScene->Initialize();
 }
-
+int lives;
+Mix_Music *music;
+Mix_Chunk *bounce;
 
 void Initialize(){
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     displayWindow = SDL_CreateWindow("Hello, World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -46,9 +49,15 @@ void Initialize(){
 #endif
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
     
+    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    
+    music = Mix_LoadMUS("Post Malone, Swae Lee - Sunflower (Spider-Man Into the Spider-Verse).mp3");
+    Mix_PlayMusic(music, -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME /4 );
+    
+    bounce = Mix_LoadWAV("bounce.wav");
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
-//    projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
     projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
@@ -59,13 +68,16 @@ void Initialize(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+    
     //initialize scenes
     sceneList[0] = new Menu();
     sceneList[1] = new Level1();
     sceneList[2] = new Level2();
     sceneList[3] = new Level3();
-    SwitchToScene(sceneList[0]);
-    GLuint fontTextureID = Util::LoadTexture("font.png");
+    SwitchToScene(sceneList[3]);
+    lives = 3;
+    
+    
     
     
 }
@@ -97,6 +109,7 @@ void ProcessInput(){
                         // Some sort of action
                         if (currentScene->state.player->collidedBottom){
                             currentScene->state.player->jump = true;
+                            Mix_PlayChannel(-1, bounce, 0);
                         }
                         break;
                 }
@@ -141,6 +154,7 @@ void Update(){
         deltaTime -= FIXED_TIMESTEP;
     }
     accumulator = deltaTime;
+    //update viewMatrix to follow the player
     viewMatrix= glm::mat4(1.0f);
     if (currentScene == sceneList[1]){
         if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
@@ -167,6 +181,11 @@ void Update(){
         else{
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
         }
+        if (currentScene->state.player->position.y < -14){
+            lives -= 1;
+            currentScene->state.player->position = glm::vec3(5,-3.75,0);
+        }
+        
     }
     else if (currentScene == sceneList[2]){
         if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
@@ -175,8 +194,11 @@ void Update(){
         else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y > -3.75){
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 3.75,0));
         }
-        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y < -9.25){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 9.25,0));
+        else if (currentScene->state.player->position.x > 16  && currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-16, 4,0));
+        }
+        else if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 4,0));
         }
         else if(currentScene->state.player->position.x < 5){
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y,0));
@@ -187,55 +209,65 @@ void Update(){
         else if (currentScene->state.player->position.y > -3.75){
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75,0));
         }
-        else if (currentScene->state.player->position.y < -9.25){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 9.25,0));
+        else if (currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 4,0));
         }
         else{
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
         }
+        
+        if (currentScene->state.player->position.y < -8){
+            lives -= 1;
+            currentScene->state.player->position = glm::vec3(2,-3.75,0);
+        }
+        
     }
     else if (currentScene == sceneList[3]){
-        if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -3.75){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75,0));
+        if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y > -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 4 ,0));
         }
-        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y > -3.75){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 3.75,0));
+        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y > -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 4,0));
         }
-        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y < -9.25){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 9.25,0));
+        else if (currentScene->state.player->position.x > 21  && currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, 4,0));
+        }
+        else if (currentScene->state.player->position.x < 5 && currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 4,0));
         }
         else if(currentScene->state.player->position.x < 5){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, -currentScene->state.player->position.y,0));
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, currentScene->state.player->position.y,0));
         }
         else if (currentScene->state.player->position.x > 21){
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-21, -currentScene->state.player->position.y,0));
         }
-        else if (currentScene->state.player->position.y > -3.75){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75,0));
+        else if (currentScene->state.player->position.y > -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 4,0));
         }
-        else if (currentScene->state.player->position.y < -9.25){
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 9.25,0));
+        else if (currentScene->state.player->position.y < -4){
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 4,0));
         }
         else{
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
         }
     }
+    std::cout << currentScene->state.player->position.x << std::endl;
+    std::cout << currentScene->state.player->position.y << std::endl;
 
 }
 
 void Render(){
     glClear(GL_COLOR_BUFFER_BIT);
     
-    program.SetViewMatrix(viewMatrix);
     
+    program.SetViewMatrix(viewMatrix);
     currentScene->Render(&program);
-    if(currentScene == sceneList[0]){
-        Util::DrawText(&program, fontTextureID, "An Untitled Platformer", 0.5, -0.25, glm::vec3(-3,0,0));
-        Util::DrawText(&program, fontTextureID, "press ENTER", 0.5, -0.25, glm::vec3(-2.5,-1,0));
+    if (lives <= 0 ){
+        currentScene->state.player->isActive = false;
+        Util::DrawText(&program, Util::LoadTexture("font.png"), "You Lose", 0.5, -0.25, glm::vec3(5,-3.75,0));
     }
     
-    
-    
+
     SDL_GL_SwapWindow(displayWindow);
 }
 

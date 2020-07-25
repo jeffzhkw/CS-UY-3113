@@ -57,23 +57,22 @@ void Util::DrawText(ShaderProgram *program, GLuint fontTexture, std::string text
             offset + (0.5f * size), 0.5f * size,
             offset + (-0.5f * size), -0.5f * size,
         });
-        
-        glm::mat4 modelMatrix = glm::mat4(1.0f);
-        modelMatrix = glm::translate(modelMatrix, position);
-        program->SetModelMatrix(modelMatrix);
-        
-        glUseProgram(program->programID);
-
-        glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
-        glEnableVertexAttribArray(program->positionAttribute);
-        
-        glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords.data());
-        glEnableVertexAttribArray(program->texCoordAttribute);
-        
-        glBindTexture(GL_TEXTURE_2D, fontTexture);
-        glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));
-        
-        glDisableVertexAttribArray(program->positionAttribute);
-        glDisableVertexAttribArray(program->texCoordAttribute);
     }
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, position);
+    program->SetModelMatrix(modelMatrix);
+    
+    glUseProgram(program->programID);
+
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glBindTexture(GL_TEXTURE_2D, fontTexture);
+    glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));
+    
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
 }

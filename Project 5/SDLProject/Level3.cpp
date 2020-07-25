@@ -9,18 +9,18 @@
 #define LEVEL3_WIDTH 27
 #define LEVEL3_HEIGHT 9
 
-#define LEVEL3_ENEMY_COUNT 0
-glm::mat4 viewMatrix3;
+#define LEVEL3_ENEMY_COUNT 1
+
 unsigned int level3_data[] = {
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,
-    3, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
+    3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,
+    3, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3,
+    3, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3
 };//hardcode corresponding value;
 
 void Level3::Initialize(){
@@ -53,16 +53,34 @@ void Level3::Initialize(){
     state.player->height = 0.8f;
     state.player->width = 0.8f;
     
+    state.enemies = new Entity[LEVEL3_ENEMY_COUNT];
+    GLuint enemyTextureID = Util::LoadTexture("ctg.png");
+    state.enemies[0].entityType = ENEMY;
+    state.enemies[0].acceleration = glm::vec3(0, -9.82, 0);
+    state.enemies[0].speed = 0.01f;
+    state.enemies[0].textureID = enemyTextureID;
+    state.enemies[0].aiState = IDLE;
+    state.enemies[0].position = glm::vec3(12,-5,0);
+    state.enemies[0].aiType = DASH;
+    
+    
+    
 }
 
 void Level3::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
-    std::cout << state.player->position.x << std::endl;
-    std::cout << state.player->position.y << std::endl;
     
+    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
+        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
+    }
 }
 
 void Level3::Render(ShaderProgram *program){
     state.map->Render(program);
+    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
+        state.enemies[i].Render(program);
+            
+    }
+    
     state.player->Render(program);
 }
