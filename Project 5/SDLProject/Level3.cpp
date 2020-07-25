@@ -53,33 +53,46 @@ void Level3::Initialize(){
     state.player->height = 0.8f;
     state.player->width = 0.8f;
     
-    state.enemies = new Entity[LEVEL3_ENEMY_COUNT];
-    GLuint enemyTextureID = Util::LoadTexture("ctg.png");
-    state.enemies[0].entityType = ENEMY;
-    state.enemies[0].acceleration = glm::vec3(0, -9.82, 0);
-    state.enemies[0].speed = 0.01f;
-    state.enemies[0].textureID = enemyTextureID;
-    state.enemies[0].aiState = IDLE;
-    state.enemies[0].position = glm::vec3(12,-5,0);
-    state.enemies[0].aiType = DASH;
+//    state.enemies = new Entity[LEVEL3_ENEMY_COUNT];
+//    state.enemies[0].textureID = Util::LoadTexture("ctg.png");
+//    state.enemies[0].entityType = ENEMY;
+//    state.enemies[0].acceleration = glm::vec3(0, -9.82f, 0);
+//    state.enemies[0].speed = 1.0f;
+//    state.enemies[0].movement = glm::vec3(0);
+//
+//    state.enemies[0].position = glm::vec3(7,0,0);
+//    state.enemies[0].aiType = DASH;
+//    state.enemies[0].aiState = IDLE;
+    state.enemies = new Entity();
+    state.enemies->textureID = Util::LoadTexture("ctg.png");
+    state.enemies->entityType = ENEMY;
+    state.enemies->acceleration = glm::vec3(0, -0.001f, 0);//NEED HELP QAQ...
+    state.enemies->speed = 1.0f;
+    state.enemies->movement = glm::vec3(0);
     
+    state.enemies->position = glm::vec3(0,0,0);
+    state.enemies->aiType = DASH;
+    state.enemies->aiState = IDLE;
     
-    
+
 }
 
 void Level3::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     
-    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
-        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
-    }
+    state.enemies->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
+    std::cout<< state.enemies->position.x <<std::endl;
+    std::cout<< state.enemies->position.y <<std::endl;
+
+//    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
+//
+//    }
 }
 
 void Level3::Render(ShaderProgram *program){
     state.map->Render(program);
     for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
         state.enemies[i].Render(program);
-            
     }
     
     state.player->Render(program);

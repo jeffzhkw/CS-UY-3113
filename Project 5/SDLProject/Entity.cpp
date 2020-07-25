@@ -136,10 +136,26 @@ void Entity::CheckCollisionX(Map *map){
 void Entity::AIDash(Entity *player){
     switch(aiState){
         case IDLE:
+            std::cout << "IDLE" <<std::endl;
+            if (glm::distance(position, player->position) < 7){
+                aiState = SENSING;
+            }
+            movement.x = 1; //NEED HELP QAQ...
             break;
         case SENSING:
+//            std::cout << "SENSING" <<std::endl;
+//            if (player->position.x < position.x){
+//                velocity.x = -1;
+//            }
+//            else if (player->position.x > position.x){
+//                velocity.x = 1;
+//            }
+//            if (glm::distance(position, player->position) < 5){
+//                aiState = ENGAGE;
+//            }
             break;
         case ENGAGE:
+//            std::cout << "SENSING" <<std::endl;
             break;
         case DEAD:
             break;

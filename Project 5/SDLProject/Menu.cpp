@@ -7,8 +7,6 @@
 //
 
 #include "Menu.h"
-#define TITLE_COUNT
-#define DESCRIPTION_COUNT
 GLuint fontTextureID;
 
 void Menu::Initialize(){
