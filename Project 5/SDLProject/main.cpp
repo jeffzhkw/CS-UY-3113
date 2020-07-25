@@ -30,6 +30,7 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 Scene *currentScene;
 Scene *sceneList[4];
+bool win;
 void SwitchToScene(Scene *scene){
     currentScene = scene;
     currentScene->Initialize();
@@ -49,7 +50,7 @@ void Initialize(){
 #endif
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
     
-    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     
     music = Mix_LoadMUS("Post Malone, Swae Lee - Sunflower (Spider-Man Into the Spider-Verse).mp3");
     Mix_PlayMusic(music, -1);
@@ -74,8 +75,9 @@ void Initialize(){
     sceneList[1] = new Level1();
     sceneList[2] = new Level2();
     sceneList[3] = new Level3();
-    SwitchToScene(sceneList[3]);
+    SwitchToScene(sceneList[0]);
     lives = 3;
+    win = false;
     
     
     
@@ -250,6 +252,19 @@ void Update(){
         else{
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x,-currentScene->state.player->position.y,0));
         }
+        if (currentScene->state.player->isActive == false){
+            currentScene->state.player->isActive = true;
+            lives -= 1;
+            currentScene->state.player->position = glm::vec3(1,-7,0);
+            currentScene->state.enemies->position = glm::vec3(12,-4,0);
+            currentScene->state.enemies->velocity = glm::vec3(0);
+        }
+        
+        if (currentScene->state.player->position.x >24.5 && currentScene->state.player->position.y < -5){
+            win = true;
+            std::cout << "win" << std::endl;
+        }
+        
     }
     std::cout << currentScene->state.player->position.x << std::endl;
     std::cout << currentScene->state.player->position.y << std::endl;
@@ -261,11 +276,16 @@ void Render(){
     
     
     program.SetViewMatrix(viewMatrix);
-    currentScene->Render(&program);
+    
     if (lives <= 0 ){
         currentScene->state.player->isActive = false;
         Util::DrawText(&program, Util::LoadTexture("font.png"), "You Lose", 0.5, -0.25, glm::vec3(5,-3.75,0));
     }
+    else if (win){
+        Util::DrawText(&program, Util::LoadTexture("font.png"), "You Win!", 0.5, -0.25, glm::vec3(21,-3.75,0));
+        currentScene->state.enemies->isActive = false;
+    }
+    currentScene->Render(&program);
     
 
     SDL_GL_SwapWindow(displayWindow);

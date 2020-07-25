@@ -12,7 +12,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 #include "Map.h"
-enum EntityType{PLAYER, PLATFORM, ENEMY};
+enum EntityType{PLAYER, ENEMY, NONE};
 
 
 enum AIType {DASH};
@@ -56,7 +56,7 @@ public:
     bool collidedBottom = false;
     bool collidedLeft = false;
     bool collidedRight = false;
-    //EntityType lastCollide;
+    EntityType lastCollide;
     
     
     Entity();

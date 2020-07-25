@@ -26,7 +26,7 @@ unsigned int level1_data[] = {
     3, 2, 2, 2, 2, 2, 3, 3, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 3
 };//hardcode corresponding value;
-
+Entity *door1;
 void Level1::Initialize(){
     //init player/enemy/map
     state.nextScene = -1;
@@ -55,13 +55,19 @@ void Level1::Initialize(){
     state.player->height = 0.8f;
     state.player->width = 0.8f;
     
+    door1 = new Entity();
+    door1->position = glm::vec3 (19.5, -12, 0);
+    door1->textureID = Util::LoadTexture("door.png");
+    
+    
+    
 }
 
 void Level1::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
 
     //switch scene condition
-    
+    door1->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
     
     
     if (state.player->position.x >=19.5 && state.player->position.y < -12){
@@ -72,5 +78,7 @@ void Level1::Update(float deltaTime){
 
 void Level1::Render(ShaderProgram *program){
     state.map->Render(program);
+    door1->Render(program);
     state.player->Render(program);
+    
 }

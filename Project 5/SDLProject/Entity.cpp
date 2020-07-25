@@ -12,11 +12,13 @@ Entity::Entity()
 }
 //Entity vs Entity
 bool Entity::CheckCollision(Entity *other){
+    if (this == other) return false;
     if (isActive == false || other->isActive == false) return false;
     float xdist = fabs(position.x - other->position.x) - ((width + other->width)/2.0f);
     float ydist = fabs(position.y - other->position.y) - ((height + other->height)/2.0f);
     
     if (xdist < 0  && ydist < 0){
+        lastCollide = other->entityType;
         return true;
     }
     return false;
@@ -139,23 +141,27 @@ void Entity::AIDash(Entity *player){
             std::cout << "IDLE" <<std::endl;
             if (glm::distance(position, player->position) < 7){
                 aiState = SENSING;
+                velocity.x = -1;
             }
-            movement.x = 1; //NEED HELP QAQ...
             break;
         case SENSING:
-//            std::cout << "SENSING" <<std::endl;
-//            if (player->position.x < position.x){
-//                velocity.x = -1;
-//            }
-//            else if (player->position.x > position.x){
-//                velocity.x = 1;
-//            }
-//            if (glm::distance(position, player->position) < 5){
-//                aiState = ENGAGE;
-//            }
+            std::cout << "SENSING" <<std::endl;
+            if (glm::distance(position, player->position) < 5){
+                aiState = ENGAGE;
+            }
             break;
         case ENGAGE:
-//            std::cout << "SENSING" <<std::endl;
+            std::cout << "ENGAGE" <<std::endl;
+            if (player->position.x < position.x){
+                acceleration.x = -2;
+            }
+            else if (player->position.x > position.x){
+                acceleration.x = 2;
+            }
+            std::cout<< collidedBottom <<std::endl;
+            if ((player->position.y > position.y) && collidedBottom){
+                velocity.y += jumpPower;
+            }
             break;
         case DEAD:
             break;
@@ -179,42 +185,70 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
     collidedBottom = false;
     collidedLeft = false;
     collidedRight = false;
+    lastCollide = NONE;
     if (entityType == ENEMY){
+        velocity += acceleration * deltaTime;
+        
+        position.y += velocity.y * deltaTime;
+        CheckCollisionY(map);
+        
+        position.x += velocity.x * deltaTime;
+        CheckCollisionX(map);
         AI(player);
+//        if (lastCollide == PLAYER && position.x < player->position.x){
+//            isActive = false;
+//        }
+        modelMatrix = glm::mat4(1.0f);
+        modelMatrix = glm::translate(modelMatrix, position);
+        
+        
     }
-    if (animIndices != NULL) {
-        if (glm::length(movement) != 0) {
-            animTime += deltaTime;
-            if (animTime >= 0.25f){
-                animTime = 0.0f;
-                animIndex++;
-                if (animIndex >= animFrames){
-                    animIndex = 0;
+    
+    else if (entityType == PLAYER){
+        if (animIndices != NULL) {
+            if (glm::length(movement) != 0) {
+                animTime += deltaTime;
+                if (animTime >= 0.25f){
+                    animTime = 0.0f;
+                    animIndex++;
+                    if (animIndex >= animFrames){
+                        animIndex = 0;
+                    }
                 }
             }
+            else {
+                animIndex = 0;
+            }
         }
-        else {
-            animIndex = 0;
+        if (jump){
+            jump = false;
+            velocity.y += jumpPower;
         }
+        velocity.x = movement.x * speed;
+        velocity += acceleration * deltaTime;
+        
+        position.y += velocity.y * deltaTime;
+        CheckCollisionY(map);
+        CheckCollisionsY(objects, objectCount);//check velocity, set to zero
+        
+        position.x += velocity.x * deltaTime;
+        CheckCollisionX(map);
+        CheckCollisionsX(objects, objectCount);
+        
+        if (lastCollide == ENEMY){
+            isActive = false;
+        }
+        
+        modelMatrix = glm::mat4(1.0f);
+        modelMatrix = glm::translate(modelMatrix, position);
+        
+        
     }
-    if (jump){
-        jump = false;
-        velocity.y += jumpPower;
+    else if (entityType == NONE){
+        modelMatrix = glm::mat4(1.0f);
+        modelMatrix = glm::translate(modelMatrix, position);
     }
     
-    velocity.x = movement.x * speed;
-    velocity += acceleration * deltaTime;
-    
-    position.y += velocity.y * deltaTime;
-    CheckCollisionY(map);
-    CheckCollisionsY(objects, objectCount);//check velocity, set to zero
-    
-    position.x += velocity.x * deltaTime;
-    CheckCollisionX(map);
-    CheckCollisionsX(objects, objectCount);
-    
-    modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::translate(modelMatrix, position);
 }
 //for player animation
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index)

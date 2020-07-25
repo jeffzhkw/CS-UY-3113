@@ -22,7 +22,7 @@ unsigned int level3_data[] = {
     3, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3,
     3, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3
 };//hardcode corresponding value;
-
+Entity *door3;
 void Level3::Initialize(){
     //init player/enemy
     
@@ -53,47 +53,40 @@ void Level3::Initialize(){
     state.player->height = 0.8f;
     state.player->width = 0.8f;
     
-//    state.enemies = new Entity[LEVEL3_ENEMY_COUNT];
-//    state.enemies[0].textureID = Util::LoadTexture("ctg.png");
-//    state.enemies[0].entityType = ENEMY;
-//    state.enemies[0].acceleration = glm::vec3(0, -9.82f, 0);
-//    state.enemies[0].speed = 1.0f;
-//    state.enemies[0].movement = glm::vec3(0);
-//
-//    state.enemies[0].position = glm::vec3(7,0,0);
-//    state.enemies[0].aiType = DASH;
-//    state.enemies[0].aiState = IDLE;
     state.enemies = new Entity();
-    state.enemies->textureID = Util::LoadTexture("ctg.png");
     state.enemies->entityType = ENEMY;
-    state.enemies->acceleration = glm::vec3(0, -0.001f, 0);//NEED HELP QAQ...
+    state.enemies->textureID = Util::LoadTexture("ctg.png");
+    state.enemies->acceleration = glm::vec3(0, -9.8f, 0);
     state.enemies->speed = 1.0f;
     state.enemies->movement = glm::vec3(0);
-    
-    state.enemies->position = glm::vec3(4,0,0);
+    state.enemies->position = glm::vec3(12,-4,0);
+    state.enemies->jumpPower = 5.0f;
     state.enemies->aiType = DASH;
     state.enemies->aiState = IDLE;
     
-
+    door3 = new Entity();
+    door3->entityType = NONE;
+    door3->position = glm::vec3 (24.5, -5, 0);
+    door3->textureID = Util::LoadTexture("door.png");
+    
 }
 
 void Level3::Update(float deltaTime){
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     
+    door3->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
+    
     state.enemies->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     std::cout<< state.enemies->position.x <<std::endl;
     std::cout<< state.enemies->position.y <<std::endl;
-
-//    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
-//
-//    }
+    
 }
 
 void Level3::Render(ShaderProgram *program){
     state.map->Render(program);
-    for (int i =0; i < LEVEL3_ENEMY_COUNT; i++){
-        state.enemies[i].Render(program);
-    }
-    
+    state.enemies->Render(program);
+    door3->Render(program);
+    Util::DrawText(program, Util::LoadTexture("font.png"), "RUN!", 0.5, -0.25, glm::vec3(3,-3.75,0));
+    Util::DrawText(program, Util::LoadTexture("font.png"), "Don't even think about finghting!!!", 0.5, -0.25, glm::vec3(1,-1.75,0));
     state.player->Render(program);
 }

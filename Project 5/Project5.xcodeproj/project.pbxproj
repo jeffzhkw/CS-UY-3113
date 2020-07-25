@@ -21,6 +21,7 @@
 		B463458B24C77F9800C0CCC4 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B463458924C77F9800C0CCC4 /* Scene.cpp */; };
 		B463458E24C77FA700C0CCC4 /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B463458C24C77FA700C0CCC4 /* Util.cpp */; };
 		B48C972A24CBB13900D53228 /* ctg.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B48C972924CBB13500D53228 /* ctg.png */; };
+		B4C3A3A424CCBCB100148A49 /* door.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = B4C3A3A324CCBCAA00148A49 /* door.png */; };
 		DBDF1B532323DE3F007CECB1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B522323DE3F007CECB1 /* main.cpp */; };
 		DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBDF1B5D2323DE8D007CECB1 /* ShaderProgram.cpp */; };
 		DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBDF1B5C2323DE8D007CECB1 /* shaders */; };
@@ -39,6 +40,7 @@
 			dstSubfolderSpec = 6;
 			files = (
 				B42A749F24CB721B00D3E9C6 /* Post Malone, Swae Lee - Sunflower (Spider-Man Into the Spider-Verse).mp3 in CopyFiles */,
+				B4C3A3A424CCBCB100148A49 /* door.png in CopyFiles */,
 				DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */,
 				B4450A4124C8B6D3003417A4 /* tileset.png in CopyFiles */,
 				B4450A4324C8B73A003417A4 /* george_0.png in CopyFiles */,
@@ -73,6 +75,7 @@
 		B463458C24C77FA700C0CCC4 /* Util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
 		B463458D24C77FA700C0CCC4 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		B48C972924CBB13500D53228 /* ctg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ctg.png; sourceTree = "<group>"; };
+		B4C3A3A324CCBCAA00148A49 /* door.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = door.png; sourceTree = "<group>"; };
 		DBDF1B4F2323DE3F007CECB1 /* Project5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project5; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDF1B522323DE3F007CECB1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBDF1B592323DE8D007CECB1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 		DBDF1B512323DE3F007CECB1 /* SDLProject */ = {
 			isa = PBXGroup;
 			children = (
+				B4C3A3A324CCBCAA00148A49 /* door.png */,
 				B42A749C24CB714900D3E9C6 /* bounce.wav */,
 				B42A749D24CB720C00D3E9C6 /* Post Malone, Swae Lee - Sunflower (Spider-Man Into the Spider-Verse).mp3 */,
 				B48C972924CBB13500D53228 /* ctg.png */,
