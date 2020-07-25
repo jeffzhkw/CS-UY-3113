@@ -70,7 +70,7 @@ void Level3::Initialize(){
     state.enemies->speed = 1.0f;
     state.enemies->movement = glm::vec3(0);
     
-    state.enemies->position = glm::vec3(0,0,0);
+    state.enemies->position = glm::vec3(4,0,0);
     state.enemies->aiType = DASH;
     state.enemies->aiState = IDLE;
     
