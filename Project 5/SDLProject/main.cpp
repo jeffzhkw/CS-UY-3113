@@ -16,7 +16,8 @@ SDL_Window* displayWindow;
 bool gameIsRunning = true;
 
 ShaderProgram program;
-glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
+ShaderProgram programUI;
+glm::mat4 viewMatrix, modelMatrix, projectionMatrix, uiMatrix;
 
 #include "Util.h"
 #include "Entity.h"
@@ -63,7 +64,14 @@ void Initialize(){
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
     
+    
+    
     glUseProgram(program.programID);
+    
+//    uiMatrix = glm::mat4(1.0f);
+//    programUI.SetProjectionMatrix(projectionMatrix);
+//    programUI.SetViewMatrix(uiMatrix);
+//    glUseProgram(programUI.programID);
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_BLEND);
@@ -287,6 +295,7 @@ void Render(){
     }
     currentScene->Render(&program);
     
+    //Util::DrawText(&programUI, Util::LoadTexture("font.png"), "lives", 0.5, -0.25, glm::vec3(4,3.5,0));
 
     SDL_GL_SwapWindow(displayWindow);
 }

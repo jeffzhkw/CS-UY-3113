@@ -86,7 +86,8 @@ void Level3::Render(ShaderProgram *program){
     state.map->Render(program);
     state.enemies->Render(program);
     door3->Render(program);
-    Util::DrawText(program, Util::LoadTexture("font.png"), "RUN!", 0.5, -0.25, glm::vec3(3,-3.75,0));
-    Util::DrawText(program, Util::LoadTexture("font.png"), "Don't even think about finghting!!!", 0.5, -0.25, glm::vec3(1,-1.75,0));
+    Util::DrawText(program, Util::LoadTexture("font.png"), "RUN!", 0.5, -0.25, glm::vec3(10,-3.75,0));
+    Util::DrawText(program, Util::LoadTexture("font.png"), "Don't even think about fighting!!!", 0.5, -0.25, glm::vec3(1,-1.75,0));
+    Util::DrawText(program, Util::LoadTexture("font.png"), "KEEP RUNNING!!!", 0.5, -0.25, glm::vec3(16,-3.75,0));
     state.player->Render(program);
 }

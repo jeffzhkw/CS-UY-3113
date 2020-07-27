@@ -153,15 +153,25 @@ void Entity::AIDash(Entity *player){
         case ENGAGE:
             std::cout << "ENGAGE" <<std::endl;
             if (player->position.x < position.x){
-                acceleration.x = -2;
+                acceleration.x = -3;
             }
             else if (player->position.x > position.x){
-                acceleration.x = 2;
+                acceleration.x = 3;
             }
             std::cout<< collidedBottom <<std::endl;
             if ((player->position.y > position.y) && collidedBottom){
                 velocity.y += jumpPower;
             }
+            if (glm::distance(position, player->position) > 8){
+                if (player->position.x < position.x){
+                    position = glm::vec3(player->position.x+6,-4,0);
+                }
+                else if (player->position.x < position.x){
+                    position = glm::vec3(player->position.x+6,-4,0);
+                }
+                
+            }
+            
             break;
         case DEAD:
             break;
