@@ -13,11 +13,13 @@
 
 
 #include "Util.h"
+#include "Effects.h"
 #include "Entity.h"
 #include "Map.h"
 #include "Scene.h"
 #include "Level1.h"
 #include "Level2.h"
+
 
 
 SDL_Window* displayWindow;
@@ -29,6 +31,7 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 Scene *currentScene;
 Scene *sceneList[2];
 
+Effects *effects;
 void SwitchToScene(Scene *scene){
     currentScene = scene;
     currentScene->Initialize();
@@ -46,7 +49,7 @@ void Initialize() {
     
     //glViewport(0, 0, 640, 480);
     
-    program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
+    program.Load("shaders/vertex_lit.glsl", "shaders/fragment_lit.glsl");
     
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
@@ -54,7 +57,6 @@ void Initialize() {
     
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
-    
     glUseProgram(program.programID);
     
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -67,6 +69,9 @@ void Initialize() {
     sceneList[0] = new Level1();
     sceneList[1] = new Level2();
     SwitchToScene(sceneList[0]);
+    
+    effects = new Effects(projectionMatrix, viewMatrix);//knows the dimention of the windows
+    //effects->Start(FADEIN, 0.3f);//start the fadein effect.
     
 }
 
@@ -124,6 +129,8 @@ void ProcessInput() {
 #define FIXED_TIMESTEP 0.0166666f
 float lastTicks = 0;
 float accumulator = 0.0f;
+
+bool lastCollidedBottom = false;
 void Update() {
     float ticks = (float)SDL_GetTicks() / 1000.0f;
     float deltaTime = ticks - lastTicks;
@@ -139,6 +146,14 @@ void Update() {
         // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
         
         currentScene->Update(FIXED_TIMESTEP);
+        program.SetLightPosition(currentScene->state.player->position);
+        
+        if (lastCollidedBottom == false && currentScene->state.player->collidedBottom){
+            //effects->Start(SHAKE, 10.0f);
+            
+        }
+        lastCollidedBottom = currentScene->state.player->collidedBottom;
+        effects->Update(FIXED_TIMESTEP);
 
         deltaTime -= FIXED_TIMESTEP;
         
@@ -153,14 +168,19 @@ void Update() {
     else{
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75,0));
     }
+    
+    viewMatrix = glm::translate(viewMatrix, effects->viewOffset);
 }
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
     
     program.SetViewMatrix(viewMatrix);
+    
+    glUseProgram(program.programID);
     currentScene->Render(&program);
     
+    effects->Render();
     
     SDL_GL_SwapWindow(displayWindow);
 }
